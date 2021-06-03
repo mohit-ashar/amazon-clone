@@ -14,27 +14,25 @@ function Orders() {
         .doc(user?.uid)
         .collection("orders")
         .orderBy("created", "desc")
-        .onSnapshot((snapshot) => {
+        .onSnapshot(async (snapshot) => {
           console.log("SNAPS", snapshot);
-          setOrders(
+          await setOrders(
             snapshot.docs.map((doc) => ({
               id: doc.id,
               data: doc.data(),
             }))
           );
-          console.log("ORDERS ", orders);
         });
     } else {
-      setOrders([user]);
+      setOrders([]);
     }
-  }, []);
+  }, [user]);
   return (
     <div className="orders">
       <h1>Your Orders</h1>
       <div className="orders__order">
-        {orders.map((order) => (
-          <Order order={order} />
-        ))}
+        {orders &&
+          orders?.map((order, index) => <Order key={index} order={order} />)}
       </div>
     </div>
   );
